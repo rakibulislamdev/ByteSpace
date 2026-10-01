@@ -3,7 +3,7 @@
 A 1:1 frontend replica of the ByteSpace course-platform design, built with
 Next.js 16, React 19, TypeScript and Tailwind v4.
 
-**Live:** https://byte-five-psi.vercel.app/
+**Live:** https://byte-space-flax-one.vercel.app/
 
 Every colour, type step, radius, shadow and line of copy here was read out of
 the Figma file `OfiTDVmxnfjhcKcdLVtk0A` through the REST API. Nothing was
