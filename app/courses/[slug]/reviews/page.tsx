@@ -14,9 +14,5 @@ export default async function ReviewsPage({
   const { slug } = await params;
   if (!courses.some((c) => c.slug === slug)) notFound();
 
-  return (
-    <CourseLayout slug={slug}>
-      <ReviewsBody />
-    </CourseLayout>
-  );
+  return <CourseLayout slug={slug} />;
 }
