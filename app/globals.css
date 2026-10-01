@@ -1,0 +1,416 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ByteSpace design tokens
+   Values are taken verbatim from the Figma file (node tree + published
+   styles), not eyeballed. See `python scripts/figma_extract.py tokens`.
+
+   The Figma design is light-mode only, so there is deliberately no
+   prefers-color-scheme inversion here: this project is a 1:1 replica and
+   a dark variant would break fidelity with the source design.
+   ========================================================================== */
+
+@theme {
+  /* --- Brand ------------------------------------------------------------ */
+  --color-brand: #003be2;          /* "Electric Violet" - primary blue      */
+  --color-brand-deep: #040819;     /* deepest navy                          */
+  --color-purple: #300b6a;
+  --color-lime: #d4fb20;           /* "Electric Lime" - accent              */
+  --color-lime-soft: #f2ff92;
+  --color-lime-pale: #e4ff54;
+  --color-teal: #64e4d0;
+
+  /* --- Ink / surfaces --------------------------------------------------- */
+  --color-ink: #242528;            /* primary text, 349 uses                */
+  --color-body: #4f4f4f;           /* body copy, 256 uses                   */
+  --color-muted: #4b4c53;          /* secondary text, 238 uses              */
+  --color-subtle: #82868e;         /* muted / meta, 73 uses                 */
+  --color-line: #ced0d3;           /* hairlines                             */
+  --color-line-soft: #e5e6e8;
+  --color-surface: #f5f5f6;
+  --color-surface-2: #fafafa;
+  --color-on-dark: #f5f5f6;
+  --color-on-dark-muted: rgb(246 246 246 / 0.6);
+
+  /* --- Radii (Figma uses 8 / 12 / 16 / 24 / 40 / pill) ------------------ */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 40px;
+
+  /* --- Elevation: the file's 8-step shadow ladder ----------------------- */
+  --shadow-e1: 0 1px 3px rgb(0 0 0 / 0.04);
+  --shadow-e2: 0 3px 6px rgb(0 0 0 / 0.06);
+  --shadow-e3: 0 8px 10px rgb(0 0 0 / 0.07);
+  --shadow-e4: 0 15px 16px rgb(0 0 0 / 0.08);
+  --shadow-e5: 0 24px 24px rgb(0 0 0 / 0.09);
+  --shadow-e6: 0 37px 36px rgb(0 0 0 / 0.1);
+  --shadow-e7: 0 53px 56px rgb(0 0 0 / 0.11);
+  --shadow-e8: 0 73px 72px rgb(0 0 0 / 0.13);
+
+  /* --- Motion (see emil-design-eng) ------------------------------------ */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ==========================================================================
+   Type scale
+   Satoshi carries body and UI, Poppins carries display, Clash Display is the
+   wordmark. Sizes / line-heights / tracking are the Figma values.
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    /* Decorative ornaments are absolutely positioned past the edges on
+       purpose; the page itself must never scroll sideways. */
+    overflow-x: clip;
+  }
+
+  body {
+    background: #fff;
+    color: var(--color-ink);
+    font-family: var(--font-satoshi), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  /* Keyboard focus only - pointer users do not get a ring on click. */
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* On light surfaces the lime ring has poor contrast, so swap to brand. */
+  .bg-brand :focus-visible,
+  .bg-brand-deep :focus-visible {
+    outline-color: #fff;
+  }
+}
+
+@layer components {
+  /* Sizes are the Figma values at 1440, and clamp down to a readable
+     minimum on small screens. Tracking is expressed in em because every
+     display step in the source uses -1% of its own font size
+     (0.72px at 72px, 0.44px at 44px, ...), so one rule covers them all. */
+
+  /* --- Display: Poppins 600 --------------------------------------------- */
+  .t-display-xl {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    font-size: clamp(30px, 5.2vw, 72px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .t-display-lg {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    font-size: clamp(26px, 3.3vw, 44px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .t-display-md {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .t-display-sm {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    font-size: clamp(19px, 1.9vw, 24px);
+    line-height: 1.333;
+    letter-spacing: -0.01em;
+  }
+  .t-display-xs {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    font-size: clamp(17px, 1.6vw, 20px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* --- Headings: Satoshi ------------------------------------------------ */
+  .t-h-l {
+    font-family: var(--font-satoshi);
+    font-weight: 500;
+    font-size: clamp(20px, 1.9vw, 24px);
+    line-height: 1.35;
+  }
+  .t-h-m {
+    font-family: var(--font-satoshi);
+    font-weight: 500;
+    font-size: clamp(18px, 1.7vw, 20px);
+    line-height: 1.2;
+  }
+  .t-h-s {
+    font-family: var(--font-satoshi);
+    font-weight: 500;
+    font-size: clamp(17px, 1.6vw, 18px);
+    line-height: 1.2;
+  }
+
+  /* --- Body: Satoshi ---------------------------------------------------- */
+  .t-body-l {
+    font-family: var(--font-satoshi);
+    font-weight: 400;
+    font-size: clamp(15px, 1.3vw, 16px);
+    line-height: 1.6;
+  }
+  .t-body-m {
+    font-family: var(--font-satoshi);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .t-body-s {
+    font-family: var(--font-satoshi);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  /* --- Labels: Satoshi medium ------------------------------------------- */
+  .t-label {
+    font-family: var(--font-satoshi);
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .t-label-lg {
+    font-family: var(--font-satoshi);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  /* --- Wordmark --------------------------------------------------------- */
+  .t-logo {
+    font-family: var(--font-clash);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.23;
+  }
+}
+
+/* ==========================================================================
+   Motion
+
+   House rules, applied throughout:
+   - transform and opacity only, so everything stays on the compositor
+   - no scroll listeners anywhere; entrances are driven by
+     IntersectionObserver, which fires once and disconnects
+   - CSS transitions rather than keyframes for anything the user can
+     interrupt (hovers, tab changes), so a retarget never restarts
+   - UI feedback under 300ms, entrances slower
+   - everything collapses under prefers-reduced-motion
+   ========================================================================== */
+
+@layer utilities {
+  /* --- Press feedback ---------------------------------------------------
+     Gated behind (hover: hover) so touch devices, which fire hover on
+     tap, do not get phantom lifts. */
+  @media (hover: hover) and (pointer: fine) {
+    .press {
+      transition: transform 160ms var(--ease-out);
+    }
+    .press:hover {
+      transform: translateY(-1px);
+    }
+    .press:active {
+      transform: scale(0.97);
+    }
+  }
+
+  /* --- Entrance ---------------------------------------------------------
+     One class, four origins. Children of a .stagger container each pick
+     up a delay from --i, set inline by the Stagger component. */
+  .reveal {
+    opacity: 0;
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 600ms var(--ease-out);
+    transition-delay: var(--i, 0ms);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+  }
+
+  .reveal-up {
+    transform: translateY(20px);
+  }
+  .reveal-left {
+    transform: translateX(-20px);
+  }
+  .reveal-scale {
+    transform: scale(0.97);
+  }
+  .reveal-fade {
+    transform: none;
+  }
+
+  .reveal-up.is-visible,
+  .reveal-left.is-visible,
+  .reveal-scale.is-visible,
+  .reveal-fade.is-visible {
+    transform: none;
+  }
+
+  /* --- Hero entrance ----------------------------------------------------
+     Runs once on load, no observer needed. The copy rises in sequence so
+     the eye lands on the headline, then the field, then the figure. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .enter {
+    opacity: 0;
+    animation: rise 700ms var(--ease-out) forwards;
+  }
+  .enter-1 { animation-delay: 60ms; }
+  .enter-2 { animation-delay: 140ms; }
+  .enter-3 { animation-delay: 220ms; }
+  .enter-4 { animation-delay: 320ms; }
+
+  /* --- Card hover -------------------------------------------------------
+     A short lift plus a slow image zoom. Transform only, and the zoom is
+     500ms so it reads as a settle rather than a jump. */
+  @media (hover: hover) and (pointer: fine) {
+    .card-lift {
+      transition:
+        transform 200ms var(--ease-out),
+        box-shadow 200ms var(--ease-out);
+    }
+    .card-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-e4);
+    }
+    .card-lift:hover .card-zoom {
+      transform: scale(1.05);
+    }
+  }
+  .card-zoom {
+    transition: transform 500ms var(--ease-in-out);
+  }
+
+  /* --- Nav underline ----------------------------------------------------
+     A transition rather than a keyframe so switching tabs mid-animation
+     retargets smoothly instead of restarting. */
+  /* A swipe strip on small screens: the row scrolls, the scrollbar does
+     not, because it would eat 15px of a 390px viewport. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Fades whichever edge of a swipe strip has content continuing past
+     it, so a clipped item reads as scrollable rather than broken. The
+     strip sets data-edge from its scroll position; the trailing edge
+     always fades, the leading edge only once there is something behind
+     it. Mobile only - the wrap layout from sm up never clips. */
+  @media (max-width: 639px) {
+    .scroll-fade[data-edge="start"] {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 36px,
+        transparent 0
+      );
+      mask-image: linear-gradient(to right, #000 36px, transparent 0);
+    }
+    .scroll-fade[data-edge="end"] {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(100% - 36px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(100% - 36px),
+        transparent 100%
+      );
+    }
+    .scroll-fade[data-edge="middle"] {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 36px,
+        #000 calc(100% - 36px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 36px,
+        #000 calc(100% - 36px),
+        transparent 100%
+      );
+    }
+  }
+
+  .tab-pill {
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+
+  /* --- Progress fill ----------------------------------------------------
+     scaleX from the left edge; animating width would relayout. */
+  .progress-fill {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 900ms var(--ease-out);
+  }
+  .progress-fill.is-filled {
+    transform: scaleX(1);
+  }
+
+  /* --- Reduced motion ---------------------------------------------------
+     Nothing below this point needs a JS branch: the classes above all
+     resolve to their end state. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    .enter {
+      opacity: 1;
+      animation: none;
+    }
+    .progress-fill {
+      transform: scaleX(1);
+    }
+  }
+}
