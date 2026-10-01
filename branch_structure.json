@@ -1,0 +1,21 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "feat/assignment",
+    "feat/assignment-new",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "feat/assignment": "main",
+    "feat/assignment-new": "feat/assignment",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "feat/assignment",
+    "origin",
+    "feat/assignment-new"
+  ]
+}
