@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CourseLayout } from "@/components/course/CourseLayout";
-import { LessonsBody } from "@/components/course/LessonsBody";
 import { courses } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Lessons" };
